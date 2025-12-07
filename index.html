@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Reflection Rooms - Both Win </title>
+    <meta name="viewport" content="width=device-width", initial-scale="1.0" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="app">
+
+        <header calss="top-bar">
+            <div class="title-block">
+                <h1>Reflection Rooms</h1>
+                <p class="subtitle">Both Win</p>
+            </div>
+            <div class="status-block">
+                <div class="status-line">
+                    <span>Level:</span>
+                    <span id="levelLabel">1</span>
+                </div>
+                <div class="status-line">
+                    <span>Moves:</span>
+                    <span id="moveCount">0</span>
+                </div>
+            </div>
+
+            <!--how to play-->
+            <button id="howToPlayBtn" class="how-btn">How to Play🤔</button>
+        </header>
+
+        <main class="main">
+            <div class="canvas-wrap">
+                <canvas id="gameCanvas"></canvas>
+
+                <div class="overlay-hidden" id="levelOverlay">
+                    <div class="overlay-card">
+                        <h2 id="overlayTitle">Level Complete!</h2>
+                        <p id="overlayMessage">You Both are amazing!!.</p>
+
+                        <div class="overlay-buttons">
+                            <button id="btnNext">Next Level</button>
+                            <button id="btnRetry">Replay this level🔃</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div id="howOverlay" class="how-overlay hidden">
+            <div class="how-card">
+                <h2>How to Play</h2>
+
+                <ul calss="how-list">
+                    <li>You have to control two character at one time - 1st one is real world and 2nd one is mirror world.</li>
+                    <li>Left right movement is oposite and up/down is same.</li>
+                    <li>Both the character have to reach the glowing circles to complete the level.</li>
+                    <li>Some walls are only in one world - use that to control movement.</li>
+                    <li>There are 2 small switches which open the door in the other world.</li>
+                    <li>Move slowly and carefully and think about how both the world react with one another.</li>
+                </ul>
+
+                <h3>Controls</h3>
+                <ul class="how-list">
+                    <li>W or ⬆️ for UP</li>
+                    <li>S or ⬇️ for DOWN</li>
+                    <li>A or ⬅️ for LEFT</li>
+                    <li>D or ➡️ for RIGHT</li>
+                    <li>R or Restart Level</li>
+                    <li>N - Skip this level</li>
+                    <li>ESC - close</li>
+                </ul>
+
+                <button id="closeHowBtn" class="how-close">Close❌</button>
+            </div>
+        </div>
+
+        <footer class="bottom">
+            <span>R = Restart * N = Skip Level to Next * ESC = close</span>
+            <br />
+            <span style="opacity:0.8; font-size:0.8rem;">
+                Made with ♥️ by <b>Biashu</b> for
+                <a href="https://milkyway.hackclub.com" target="_blank" style="color:var(--accent); text-decoration:none;">
+                    Milkyway
+                </a>
+            </span>
+        </footer>
+    </div>
+
+    <!--JS-->
+    <script scr="./gameLogic.js"></script>
+</body>
+</html>
