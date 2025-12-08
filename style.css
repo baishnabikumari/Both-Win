@@ -95,3 +95,142 @@ body{
     border-radius:14px;
     background:#151827;
 }
+
+.overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(15,23,42,0.35);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.overlay.hidden{
+    display:none;
+}
+
+.overlay.card{
+    background:#ffffff;
+    padding:1.4rem;
+    border-radius:14px;
+    max-width:400px;
+    text-align:center;
+    border:1px solid rgba(148,163,184,0.45);
+    box-shadow:0 16px 32px rgba(15,23,42,0.25);
+}
+.overlay-card h2{
+    margin-bottom:0.4rem;
+}
+
+.overlay-card p{
+    font-size:0.9rem;
+    color:var(--text-soft);
+}
+
+.overlay-buttons{
+    display:flex;
+    justify-content:center;
+    gap:0.6rem;
+    margin-top:0.9rem;
+}
+
+.overlay-buttons button{
+    border-radius:999px;
+    padding:0.45rem 0.9rem;
+    border:none;
+    cursor:pointer;
+    font-size:0.85rem;
+    font-weight:600;
+}
+
+#btnNext{
+    background:linear-gradient(135deg, var(--accent), var(--accent-2));
+    color:#fff;
+}
+
+#btnRetry{
+    background:rgba(51,214,166,0.1);
+    color:var(--good);
+    border:1px solid rgba(51,214,166,0.6);
+}
+
+.how-overlay{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    background:rgba(15,23,42,0.6);
+    backdrop-filter:blur(10px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:2rem;
+}
+.how-overlay.hidden{
+    display:none;
+}
+
+.how-card{
+    background:#ffffff;
+    color:var(--text-main);
+    padding:1.6rem;
+    border-radius:16px;
+    max-width:460px;
+    width:100%;
+    max-height:90vh;
+    overflow-y:auto;
+    border:1px solid rgba(148,163,184,0.6);
+    box-shadow:0 18px 40px rgba(15,23,42,0.35);
+    animation:popupIn o.25s ease-out;
+}
+.how.card h2{
+    text-align:center;
+    margin-bottom:0.7rem;
+}
+
+.how.list{
+    padding-left:1.3rem;
+    font-size:0.93;
+    color:var(--text-soft);
+    margin:0.7rem 0 0.9rem;
+}
+.how.list li + li{
+    margin-top:0.4rem;
+}
+
+/*close buttom*/
+.how-close{
+    width:100%;
+    padding:0.6rem;
+    margin-top:0.7rem;
+    border-radius:999px;
+    background:linear-gradient(135deg, var(--accent), var(--accent-2));
+    border:none;
+    color:#fff;
+    cursor:pointer;
+    font-size:0.95rem;
+    font-weight:600;
+    box-shadow:0 6px 18px rgba(236,55,80,0.35);
+}
+.how-close:hover{
+    transform:translateY(-1px);
+    filter:brightness(1.03);
+}
+
+.bottom{
+    margin-top:1rem;
+    text-align:center;
+    color:var(--text-soft);
+    font-size:0.8rem;
+}
+
+.bottom a{
+    color:var(--accent);
+}
+
+@keyframes popupIn{
+    form{
+        transform:scale(0.95) translateY(8px);
+        opacity:0;
+    }
+    to {transform:scale(1) translateY(0);
+    opacity:1;}
+}
