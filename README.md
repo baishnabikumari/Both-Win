@@ -2,6 +2,11 @@
 > **One Move. Two Worlds.**
 
 ScreenShot-
+<img width="1440" height="723" alt="Screenshot 2025-12-08 at 10 43 48 PM" src="https://github.com/user-attachments/assets/23fead4c-a6ac-4637-8567-4f715541e242" />
+<img width="1440" height="723" alt="Screenshot 2025-12-08 at 10 44 01 PM" src="https://github.com/user-attachments/assets/279c1150-aa3b-449a-99e2-0d72ded9cc46" />
+
+## video of the game-play.
+https://github.com/user-attachments/assets/dbfe4778-5dd3-4a21-b6f7-1fc8cef226d3
 
 ## About the GAME
 **Why Reflection Rooms?** because it is a dual world puzzle game built with plan JavaScript, css and HTML 5 Canvas. Here you control two character(As a ball) - one in "Real world" and 2nd one in "Mirror World".
