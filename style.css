@@ -80,3 +80,18 @@ body{
     box-shadow:0 10px 24px rgba(236,55,80,0.45);
 }
 
+.canvas-wrap{
+    margin-top:1rem;
+    position:relative;
+    padding:0.9rem;
+    border-radius:18px;
+    background:linear-gradient(135, rgba(255,255,255,0.9), rgba(255,255,255,0.9));
+    border:1px solid rgba(148,163,184,0.25);
+}
+
+#gameCanvas{
+    width:100%;
+    display:block;
+    border-radius:14px;
+    background:#151827;
+}
