@@ -1,5 +1,5 @@
 *,
-*::before *::after {
+*::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -18,7 +18,7 @@
 }
 
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "segoe UI", sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background: radial-gradient(circle at top, rgba(255, 140, 55, 0.35), transparent 55%), radial-gradient(circle at bottom, rgba(236, 55, 80, 0.25), transparent 55%), var(--bg);
     color: var(--text-main);
     min-height: 100vh;
@@ -45,6 +45,11 @@ body {
 
 .title-block h1 {
     font-size: 1.7rem;
+    letter-spacing: 0.02em;
+}
+
+.subtitle {
+    font-size: 0.85;
     color: var(--text-soft);
 }
 
@@ -60,17 +65,17 @@ body {
     color: var(--text-soft);
 }
 
-.status-btn {
+.how-btn{
     padding: 0.45rem 0.9rem;
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
     border: none;
     border-radius: 999px;
     color: #fff;
     cursor: pointer;
-    font-size: 0.85;
+    font-size: 0.85rem;
     font-weight: 600;
-    box-shadow: 0 6px 18px rgba(236, 55, 80, 0.35);
-    transition: transform 0.15 ease, box-shadow 0.15 ease, filter 0.15 ease;
+    box-shadow: 0 6px 18px rgba(236,55,80,0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
 }
 
 .how-btn:hover {
@@ -84,7 +89,7 @@ body {
     position: relative;
     padding: 0.9rem;
     border-radius: 18px;
-    background: linear-gradient(135, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9));
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 248, 235, 0.9));
     border: 1px solid rgba(148, 163, 184, 0.25);
 }
 
@@ -108,10 +113,10 @@ body {
     display: none;
 }
 
-.overlay.card {
+.overlay-card {
     background: #ffffff;
     padding: 1.4rem;
-    border-radius: 15px;
+    border-radius: 14px;
     max-width: 400px;
     text-align: center;
     border: 1px solid rgba(148, 163, 184, 0.45);
@@ -181,22 +186,26 @@ body {
     overflow-y: auto;
     border: 1px solid rgba(148, 163, 184, 0.6);
     box-shadow: 0 18px 40px rgba(15, 23, 42, 0.35);
-    animation: popupIn o.25s ease-out;
+    animation: popupIn 0.25s ease-out;
 }
 
-.how.card h2 {
+.how-card h2 {
     text-align: center;
     margin-bottom: 0.7rem;
 }
 
-.how.list {
+.how-card h3 {
+    margin-top: 0.6rem;
+}
+
+.how-list {
     padding-left: 1.3rem;
-    font-size: 0.93;
+    font-size: 0.93rem;
     color: var(--text-soft);
     margin: 0.7rem 0 0.9rem;
 }
 
-.how.list li+li {
+.how-list li+li {
     margin-top: 0.4rem;
 }
 
@@ -232,7 +241,7 @@ body {
 }
 
 @keyframes popupIn {
-    form {
+    from {
         transform: scale(0.95) translateY(8px);
         opacity: 0;
     }
