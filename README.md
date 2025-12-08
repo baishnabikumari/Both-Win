@@ -14,6 +14,9 @@ https://github.com/user-attachments/assets/dbfe4778-5dd3-4a21-b6f7-1fc8cef226d3
 The catch? **Their movement are linked**
 * **vertical movement** - synchronized (up is up).
 * **Horizontal movement** is **mirrored** (left is right).
+```
+3 levels only || more levels soon with more complexity
+```
 
 you must navigate obstacles, trigger the switches, and use your controls and the differences of that to guide them both.
 
