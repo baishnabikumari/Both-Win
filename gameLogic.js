@@ -4,13 +4,13 @@ const levelLabel = document.getElementById("levelLabel");
 const moveCountEl = document.getElementById("moveCount");
 
 const overlay = document.getElementById("levelOverlay");
-const overlayTitle = document.getElementById("levelOverlay");
+const overlayTitle = document.getElementById("overlayTitle");
 const overlayMessage = document.getElementById("overlayMessage");
 const btnNext = document.getElementById("btnNext");
 const btnRetry = document.getElementById("btnRetry");
 
 //How to play
-document.addEventListener("DOMcontentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
     const howOverlay = document.getElementById("howOverlay");
     const howBtn = document.getElementById("howToPlayBtn");
     const closeHow = document.getElementById("closeHowBtn");
@@ -33,7 +33,7 @@ const GAP = 40;
 
 const levels = [
     {
-        name: "Split and Start",
+        name: "Split Start",
         real: [
             "##########",
             "#@....R..#",
@@ -55,7 +55,7 @@ const levels = [
     },
 
     {
-        name: "Reflection of the Doors",
+        name: "Reflection Doors",
         real: [
             "##########",
             "#@...S.D.#",
@@ -67,10 +67,10 @@ const levels = [
         ],
         mirror: [
             "##########",
-            "#@...S.D.#",
-            "#..###...#",
+            "#.d.s...@#",
+            "#...###..#",
             "#........#",
-            "#....G...#",
+            "#...g....#",
             "#........#",
             "##########"
         ]
@@ -115,7 +115,7 @@ let goalM = { x: 0, y: 0 };
 let realDoorOpen = false;
 let mirrorDoorOpen = false;
 
-function tite(grid, x, y) {
+function tile(grid, x, y) {
     if (x < 0 || y < 0 || x >= width || y >= height) return "#";
     return grid[y][x];
 }
@@ -130,7 +130,7 @@ function isWallMirror(t) {
     return false;
 }
 function updateDoors() {
-    mirrorDoorOpen = tile(realGrip, playerR.x, playerR.y) === "S";
+    mirrorDoorOpen = tile(realGrid, playerR.x, playerR.y) === "S";
     realDoorOpen = tile(mirrorGrid, playerM.x, playerM.y) === "s";
 }
 
@@ -219,7 +219,7 @@ function checkWin() {
         playerR.x === goalR.x && playerR.y === goalR.y &&
         playerM.x === goalM.x && playerM.y === goalM.y
     ) {
-        showOverlay("Level Completed!", levels[currentLevel].name);
+        showOverlay("Level Complete!", levels[currentLevel].name);
     }
 }
 
@@ -253,10 +253,11 @@ function drawRoom(grid, offsetX, mirror) {
                 ctx.fillRect(px, py, TILE, TILE);
             }
             if (t === "R" && !mirror) {
-                ctx.fillStyle(px, py, TILE, TILE);
+                ctx.fillStyle = "rgba(80,200,255,0.25)";
+                ctx.fillRect(px, py, TILE, TILE);
             }
             if (t === "X" && mirror) {
-                ctx.fillStyle = "rgba(255,126,182,0.25";
+                ctx.fillStyle = "rgba(255,126,182,0.25)";
                 ctx.fillRect(px, py, TILE, TILE);
             }
             if (t === "D" && !mirror) drawDoor(px, py, true);
@@ -287,7 +288,7 @@ function drawDoor(px, py, realDoor) {
     ctx.fillStyle = open ? "rgba(0,255,150,0.15)" : "rgba(10,10,20,1)";
     ctx.fillRect(px, py, TILE, TILE);
 
-    ctx.strokeStyle = realDoor ? "#61dafb" : "#ff7eb6"
+    ctx.strokeStyle = realDoor ? "#61dafb" : "#ff7eb6";
     ctx.strokeRect(px + 4, py + 4, TILE - 8, TILE - 8);
 }
 
@@ -306,7 +307,7 @@ function drawPlayer(px, py, mirror) {
     const cy = py + TILE / 2;
     const r = TILE * 0.27;
 
-    ctx.fillStyle = mirror ? "#ff7eb6" : "#61dafb"
+    ctx.fillStyle = mirror ? "#ff7eb6" : "#61dafb";
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.fill();
