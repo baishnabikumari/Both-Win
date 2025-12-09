@@ -8,6 +8,11 @@ const overlayTitle = document.getElementById("overlayTitle");
 const overlayMessage = document.getElementById("overlayMessage");
 const btnNext = document.getElementById("btnNext");
 const btnRetry = document.getElementById("btnRetry");
+const moveSound = new Audio("assets/movement.mp3");
+const winSound = new Audio("assets/win.mp3");
+const nextSound = new Audio("assets/nextlevel.mp3");
+const restartSound = new Audio("assets/restart.mp3");
+moveSound.volume = 0.5;
 
 //How to play
 document.addEventListener("DOMContentLoaded", () => {
@@ -105,6 +110,7 @@ let moveCount = 0;
 
 let realGrid = [];
 let mirrorGrid = [];
+let isLevelComplete = false;
 
 let playerR = { x: 0, y: 0 };
 let playerM = { x: 0, y: 0 };
@@ -136,6 +142,7 @@ function updateDoors() {
 
 //load level
 function loadLevel(i) {
+    isLevelComplete = false
     currentLevel = i;
 
     const L = levels[i];
@@ -172,9 +179,15 @@ window.addEventListener("resize", resize);
 
 //movement
 document.addEventListener("keydown", (e) => {
-    if (e.key === "r") return loadLevel(currentLevel);
-    if (e.key === "n") return loadLevel((currentLevel + 1) % levels.length);
-
+    if(e.key === "r"){
+        restartSound.play();
+        return loadLevel(currentLevel);
+    }
+    if(e.key === "n"){
+        nextSound.play();
+        return loadLevel((currentLevel + 1) % levels.length);
+    }
+    
     let dx = 0, dy = 0;
     if (e.key === "ArrowUp" || e.key === "w") dy = -1;
     if (e.key === "ArrowDown" || e.key === "s") dy = 1;
@@ -184,6 +197,7 @@ document.addEventListener("keydown", (e) => {
     move(dx, dy);
 });
 function move(dxR, dyR) {
+    if(isLevelComplete) return;
     const dxM = -dxR;
     const dyM = dyR;
 
@@ -207,6 +221,8 @@ function move(dxR, dyR) {
         moved = true;
     }
     if (moved) {
+        moveSound.currentTime = 0;
+        moveSound.play();
         moveCount++;
         moveCountEl.textContent = moveCount;
 
@@ -219,6 +235,10 @@ function checkWin() {
         playerR.x === goalR.x && playerR.y === goalR.y &&
         playerM.x === goalM.x && playerM.y === goalM.y
     ) {
+        if(isLevelComplete) return;
+        isLevelComplete = true;
+
+        winSound.play();
         showOverlay("Level Complete!", levels[currentLevel].name);
     }
 }
@@ -232,8 +252,14 @@ function showOverlay(title, msg) {
 function hideOverlay() {
     overlay.classList.add("hidden");
 }
-btnNext.onclick = () => loadLevel((currentLevel + 1) % levels.length);
-btnRetry.onclick = () => loadLevel(currentLevel);
+btnNext.onclick = () => {
+    nextSound.play();
+    loadLevel((currentLevel + 1) % levels.length);
+};
+btnRetry.onclick = () => {
+    restartSound.play();
+    loadLevel(currentLevel);
+};
 
 function drawRoom(grid, offsetX, mirror) {
     ctx.fillStyle = mirror ? "rgba(255,126,182,0.06)" : "rgba(97,218,251,0.10)";
