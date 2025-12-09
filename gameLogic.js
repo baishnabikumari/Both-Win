@@ -16,6 +16,13 @@ const nextSound = new Audio("assets/nextlevel.mp3");
 const restartSound = new Audio("assets/restart.mp3");
 moveSound.volume = 0.5;
 
+function playSound(Sound) {
+    if(Sound){
+        Sound.currentTime = 0;
+        Sound.play().catch(e => console.warn("Sound blocked:", e));
+    }
+}
+
 const TILE = 60;
 const GAP = 60;
 
@@ -50,22 +57,22 @@ const levels = [
         name: "Reflection Doors",
         real: [
             "##########",
-            "#@...S.D.#",
-            "#..###...#",
+            "#@.......#",
             "#........#",
-            "#....G...#",
-            "#........#",
+            "#.####...#",
+            "#....D..G#",
+            "#....#...#",
             "#........#",
             "#........#",
             "##########"
         ],
         mirror: [
             "##########",
-            "#.d.s...@#",
-            "#...###..#",
+            "#.......@#",
             "#........#",
+            "#...####..#",
+            "#s.......#",
             "#...g....#",
-            "#........#",
             "#........#",
             "#........#",
             "##########"
@@ -113,12 +120,32 @@ let realDoorOpen = false;
 let mirrorDoorOpen = false;
 
 document.addEventListener("DOMContentLoaded", () => {
-    const openHow = () => howOverlay.classList.remove("hidden");
-    document.getElementById("howToPlayBtn").onclick = openHow;
-    document.getElementById("btnControls").onclick = openHow;
+
+    if(btnNext) btnNext.className = "pill-btn";
+    if(btnRetry) btnRetry.className = "pill-btn";
+
+    const howTitle = document.querySelector("#howOverlay h2");
+    const rulesList = document.getElementById("rulesList");
+    const controlsList = document.getElementById("controlsList");
+
+    const openHow = (type) => {
+        if (type === "RULES") {
+            howTitle.textContent = "HOW TO PLAY";
+            rulesList.classList.remove("hidden");
+            controlsList.classList.add("hidden");
+        } else {
+            howTitle.textContent = "CONTROLS";
+            rulesList.classList.add("hidden");
+            controlsList.classList.remove("hidden");
+        }
+        howOverlay.classList.remove("hidden");
+    };
+
+    document.getElementById("howToPlayBtn").onclick = () => openHow("RULES");
+    document.getElementById("btnControls").onclick = () => openHow("CONTROLS");
     document.getElementById("closeHowBtn").onclick = () =>
     howOverlay.classList.add("hidden");
-    
+
     document.getElementById("btnSelectLevel").onclick = () => {
         generateLevelList();
         selectLevelOverlay.classList.remove("hidden");
@@ -194,6 +221,7 @@ function generateLevelList(){
     levels.forEach((lvl, index) => {
         const btn = document.createElement("button");
         btn.classList.add("level-select-btn");
+        btn.textContent = `Level ${index + 1}`;
         btn.onclick = () => {
             nextSound.play();
             loadLevel(index);
@@ -210,11 +238,11 @@ window.addEventListener("resize", resize);
 //movement
 document.addEventListener("keydown", (e) => {
     if(e.key === "r"){
-        restartSound.play();
+        playSound(restartSound);
         return loadLevel(currentLevel);
     }
     if(e.key === "n"){
-        nextSound.play();
+        playSound(nextSound);
         return loadLevel((currentLevel + 1) % levels.length);
     }
     
@@ -252,10 +280,8 @@ function move(dxR, dyR) {
     }
     if (moved) {
         moveSound.currentTime = 0;
-        moveSound.play();
+        playSound(moveSound);
         moveCount++;
-        moveCountEl.textContent = moveCount;
-
         updateDoors();
         checkWin();
     }
@@ -268,7 +294,7 @@ function checkWin() {
         if(isLevelComplete) return;
         isLevelComplete = true;
 
-        winSound.play();
+        playSound(winSound);
         showOverlay("Level Complete!", levels[currentLevel].name);
     }
 }
@@ -283,11 +309,11 @@ function hideOverlay() {
     overlay.classList.add("hidden");
 }
 btnNext.onclick = () => {
-    nextSound.play();
+    playSound(nextSound);
     loadLevel((currentLevel + 1) % levels.length);
 };
 btnRetry.onclick = () => {
-    restartSound.play();
+    playSound(restartSound);
     loadLevel(currentLevel);
 };
 
@@ -313,7 +339,7 @@ function drawRoom(grid, offsetX, mirror) {
                 ctx.fillRect(px, py, TILE, TILE);
             }
             if (t === "X" && mirror) {
-                ctx.fillStyle = "rgba(255,126,182,0.25)";
+                ctx.fillStyle = "rgba(242,83,73,0.3)";
                 ctx.fillRect(px, py, TILE, TILE);
             }
             if (t === "D" && !mirror) drawDoor(px, py, true);
@@ -360,8 +386,10 @@ function drawDoor(px, py, realDoor) {
 function drawSwitch(px, py, mirror) {
     const cx = px + TILE / 2;
     const cy = py + TILE / 2;
+
     const isActive = mirror ? mirrorDoorOpen : realDoorOpen;
     ctx.fillStyle = mirror ? "#f25349" : "#61dafb";
+
     if(isActive) ctx.fillStyle = "#ffffff";
     ctx.beginPath();
     ctx.roundRect(cx - 15, cy - 6, 30, 12, 6);

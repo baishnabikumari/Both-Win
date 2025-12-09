@@ -206,7 +206,8 @@ body {
     padding: 10px;
     border-radius: 10px;
     cursor: pointer;
-    font-family: var(--font-heading);
+    font-family: var(--font-body);
+    font-weight: 600;
 }
 
 .level-select-btn:hover {
