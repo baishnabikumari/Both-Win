@@ -1,40 +1,23 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const levelLabel = document.getElementById("levelLabel");
-const moveCountEl = document.getElementById("moveCount");
 
+const levelDisplay = document.getElementById("levelDisplay");
 const overlay = document.getElementById("levelOverlay");
 const overlayTitle = document.getElementById("overlayTitle");
 const overlayMessage = document.getElementById("overlayMessage");
 const btnNext = document.getElementById("btnNext");
 const btnRetry = document.getElementById("btnRetry");
+const howOverlay = document.getElementById("howOverlay");
+const selectLevelOverlay = document.getElementById("selectLevelOverlay");
+const levelListContainer = document.getElementById("levelList");
 const moveSound = new Audio("assets/movement.mp3");
 const winSound = new Audio("assets/win.mp3");
 const nextSound = new Audio("assets/nextlevel.mp3");
 const restartSound = new Audio("assets/restart.mp3");
 moveSound.volume = 0.5;
 
-//How to play
-document.addEventListener("DOMContentLoaded", () => {
-    const howOverlay = document.getElementById("howOverlay");
-    const howBtn = document.getElementById("howToPlayBtn");
-    const closeHow = document.getElementById("closeHowBtn");
-
-    howBtn.onclick = () => howOverlay.classList.remove("hidden");
-    closeHow.onclick = () => howOverlay.classList.add("hidden");
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") howOverlay.classList.add("hidden");
-    });
-
-    howOverlay.addEventListener("click", (e) => {
-        if (e.target === howOverlay) {
-            howOverlay.classList.add("hidden");
-        }
-    });
-});
-
-const TILE = 70;
-const GAP = 70;
+const TILE = 60;
+const GAP = 60;
 
 const levels = [
     {
@@ -71,6 +54,8 @@ const levels = [
             "#..###...#",
             "#........#",
             "#....G...#",
+            "#........#",
+            "#........#",
             "#........#",
             "##########"
         ],
@@ -117,19 +102,41 @@ const levels = [
 let currentLevel = 0;
 let height, width;
 let moveCount = 0;
-
 let realGrid = [];
 let mirrorGrid = [];
 let isLevelComplete = false;
-
 let playerR = { x: 0, y: 0 };
 let playerM = { x: 0, y: 0 };
-
 let goalR = { x: 0, y: 0 };
 let goalM = { x: 0, y: 0 };
-
 let realDoorOpen = false;
 let mirrorDoorOpen = false;
+
+document.addEventListener("DOMContentLoaded", () => {
+    const openHow = () => howOverlay.classList.remove("hidden");
+    document.getElementById("howToPlayBtn").onclick = openHow;
+    document.getElementById("btnControls").onclick = openHow;
+    document.getElementById("closeHowBtn").onclick = () =>
+    howOverlay.classList.add("hidden");
+    
+    document.getElementById("btnSelectLevel").onclick = () => {
+        generateLevelList();
+        selectLevelOverlay.classList.remove("hidden");
+    };
+    document.getElementById("closeSelectBtn").onclick = () => selectLevelOverlay.classList.add("hidden");
+    document.getElementById("btnFeatures").onclick = () => {
+        alert("Features:\n- Dual World (real world and mirror world)\n- Retro Sound Effects\n- Level selection\n- Custom UI");
+    };
+    document.addEventListener("keydown", (e) => {
+        if(e.key === "Escape") {
+            howOverlay.classList.add("hidden");
+            selectLevelOverlay.classList.add("hidden");
+        }
+    });
+
+    loadLevel(0);
+    gameLoop();
+});
 
 function tile(grid, x, y) {
     if (x < 0 || y < 0 || x >= width || y >= height) return "#";
@@ -155,12 +162,15 @@ function loadLevel(i) {
     isLevelComplete = false
     currentLevel = i;
 
+    levelDisplay.textContent = `LEVEL-${i + 1}`;
+
     const L = levels[i];
     realGrid = L.real.map(r => r.split(""));
     mirrorGrid = L.mirror.map(r => r.split(""));
 
     height = realGrid.length;
     width = realGrid[0].length;
+
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
             const R = realGrid[y][x];
@@ -174,12 +184,22 @@ function loadLevel(i) {
     }
 
     moveCount = 0;
-    moveCountEl.textContent = 0;
-    levelLabel.textContent = `${i + 1} / ${levels.length}`;
-
     updateDoors();
     resize();
     hideOverlay();
+    selectLevelOverlay.classList.add("hidden");
+}
+function generateLevelList(){
+    levelListContainer.innerHTML = "";
+    levels.forEach((lvl, index) => {
+        const btn = document.createElement("button");
+        btn.classList.add("level-select-btn");
+        btn.onclick = () => {
+            nextSound.play();
+            loadLevel(index);
+        };
+        levelListContainer.appendChild(btn);
+    });
 }
 function resize() {
     canvas.width = width * TILE * 2 + GAP;
@@ -309,44 +329,57 @@ function drawRoom(grid, offsetX, mirror) {
 }
 
 function drawGoal(px, py, mirror) {
-    const r = TILE * 0.27;
+    const r = TILE * 0.3;
     const cx = px + TILE / 2;
     const cy = py + TILE / 2;
 
-    ctx.fillStyle = mirror ? "rgba(255,126,182,0.35)" : "rgba(158,255,180,0.4)";
+    ctx.fillStyle = mirror ? "#f25349" : "#33d6a6";
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = ctx.fillStyle;
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.fill();
+    ctx.shadowBlur = 0;
 }
 function drawDoor(px, py, realDoor) {
     const open = realDoor ? realDoorOpen : mirrorDoorOpen;
 
-    ctx.fillStyle = open ? "rgba(0,255,150,0.15)" : "rgba(10,10,20,1)";
-    ctx.fillRect(px, py, TILE, TILE);
+    ctx.fillStyle = open ? "#33d6a6" : "#f25349";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(px + 10, py + 10, TILE - 20, TILE - 20);
 
-    ctx.strokeStyle = realDoor ? "#61dafb" : "#ff7eb6";
-    ctx.strokeRect(px + 4, py + 4, TILE - 8, TILE - 8);
+    if(!open) {
+        ctx.fillStyle = ctx.strokeStyle;
+        ctx.globalAlpha = 0.2;
+        ctx.fillRect(px + 10, py + 10, TILE - 20, TILE - 20);
+        ctx.globalAlpha = 1.0;
+    }
+    ctx.lineWidth = 1;
 }
 
 function drawSwitch(px, py, mirror) {
     const cx = px + TILE / 2;
     const cy = py + TILE / 2;
-
-    ctx.fillStyle = mirror ? (mirrorDoorOpen ? "#ff7eb6" : "rgba(255,126,182,0.4)") : (realDoorOpen ? "rgba(97,218,251,0.4)" : "#61dafb");
+    const isActive = mirror ? mirrorDoorOpen : realDoorOpen;
+    ctx.fillStyle = mirror ? "#f25349" : "#61dafb";
+    if(isActive) ctx.fillStyle = "#ffffff";
     ctx.beginPath();
-    ctx.roundRect(cx - 14, cy - 6, 28, 12, 6);
+    ctx.roundRect(cx - 15, cy - 6, 30, 12, 6);
     ctx.fill();
 }
 
 function drawPlayer(px, py, mirror) {
     const cx = px + TILE / 2;
     const cy = py + TILE / 2;
-    const r = TILE * 0.27;
+    const r = TILE * 0.3;
 
-    ctx.fillStyle = mirror ? "#ff7eb6" : "#61dafb";
+    ctx.fillStyle = mirror ? "#f25349" : "#61dafb";
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = ctx.fillStyle;
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.fill();
+    ctx.shadowBlur = 0;
 }
 
 function render() {
@@ -362,7 +395,3 @@ function gameLoop() {
     render();
     requestAnimationFrame(gameLoop);
 }
-
-//start game
-loadLevel(0);
-gameLoop();

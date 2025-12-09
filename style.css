@@ -157,7 +157,7 @@ body {
     padding: 30px;
     border-radius: 20px;
     text-align: center;
-    border: 2px var(--primary);
+    border: 2px solid var(--primary);
     min-width: 300px;
 }
 
@@ -193,7 +193,7 @@ body {
     gap: 15px;
 }
 
-.leve-grid {
+.level-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
