@@ -25,6 +25,7 @@ you must navigate obstacles, trigger the switches, and use your controls and the
 * **Interactive**
 * **A-symmetrical maps**
 * **Levels built with simple text strings**
+* **funny sounds added now for all the movements and for more buttons(R,N)**
 
 ## Built with
 * **HTML5 Canvas**
@@ -70,6 +71,7 @@ keys
  * **index.html** Container, canvas, UI overlays.
  * **style.css** Theme uses :'root'.
  * **gameLogic.js** Handle rendering, calculates physics and check the collisions.
+ * **assets** for the sound .mp3 files.
 
  ## how can you create you own level?
 --The game is very easy extensible. all the levels data is stored in the gameLogic.js as Array of the ASCII strings.
