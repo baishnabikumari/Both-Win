@@ -29,7 +29,7 @@ body {
 
 .app {
     width: 100%;
-    max-width: 1200px;
+    max-width:96vw;;
     padding: 1rem 1.4rem;
     background: var(--panel);
     border-radius: var(--radius-lg);

@@ -3,96 +3,76 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Reflection Rooms - Both Win </title>
+    <title>Reflection Rooms</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Luckiest+Guy&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-    <div class="app">
 
-        <header class="top-bar">
-            <div class="title-block">
-                <h1>Reflection Rooms</h1>
-                <p class="subtitle">One move. Two worlds.</p>
+    <div class="app-container">
+
+        <header class="header">
+            <div class="header-left">
+                <h2 id="levelDisplay">LEVEL-1</h2>
+                <button id="btnSelectLevel" class="pill-btn small-btn">Select Levels</button>
+            </div>
+            <div class="header-center">
+                <h1>REFLECTION ROOMS</h1>
+                <p>One move. Two worlds.</p>
             </div>
             <div class="status-block">
-                <div class="status-line">
-                    <span>Level:</span>
-                    <span id="levelLabel">1</span>
+                <div class="header-right">
+                    <button id="howToPlayBtn" class="pill-btn">HOW TO PLAY?</button>
                 </div>
-                <div class="status-line">
-                    <span>Moves:</span>
-                    <span id="moveCount">0</span>
-                </div>
-            </div>
-
-            <!--how to play-->
-            <button id="howToPlayBtn" class="how-btn">How to Play🤔?</button>
         </header>
 
-        <main class="main">
-            <div class="canvas-wrap">
-                <canvas id="gameCanvas"></canvas>
-
-                <div class="overlay hidden" id="levelOverlay">
-                    <div class="overlay-card">
-                        <h2 id="overlayTitle">Level Complete!</h2>
-                        <p id="overlayMessage">You Both are amazing!!.</p>
-
-                        <div class="overlay-buttons">
-                            <button id="btnNext">Next Level</button>
-                            <button id="btnRetry">Replay this level</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <main class="game-area">
+            <canvas id="gameCanvas"></canvas>
         </main>
-
-        <div id="howOverlay" class="how-overlay hidden">
-            <div class="how-card">
-                <h2>How to Play</h2>
-
-                <ul class="how-list">
-                    <li>You have to control two character at one time - 1st one is real world and 2nd one is mirror
-                        world.</li>
-                    <li>Left right movement is oposite and up/down is same.</li>
-                    <li>Both the character have to reach the glowing circles to complete the level.</li>
-                    <li>Some walls are only in one world - use that to control movement.</li>
-                    <li>There are 2 small switches which open the door in the other world.</li>
-                    <li>Move slowly and carefully and think about how both the world react with one another.</li>
-                </ul>
-
-                <h3>Controls</h3>
-                <ul class="how-list">
-                    <li>W or ⬆️ for UP</li>
-                    <li>S or ⬇️ for DOWN</li>
-                    <li>A or ⬅️ for LEFT</li>
-                    <li>D or ➡️ for RIGHT</li>
-                    <li>R or Restart Level</li>
-                    <li>N - Skip this level</li>
-                    <li>ESC - close</li>
-                </ul>
-
-                <button id="closeHowBtn" class="how-close">Close❌</button>
-            </div>
-        </div>
-
-        <footer class="bottom">
-            <span>R = Restart * N = Skip Level to Next * ESC = close</span>
-            <br />
-            <span style="opacity:0.8; font-size:0.8rem;">
-                Made with ♥️ by <b>Biashu</b> for
-                <a href="https://milkyway.hackclub.com" target="_blank"
-                    style="color:var(--accent); text-decoration:none;">
-                    Milkyway
-                </a>
-            </span>
+        <footer class="footer">
+            <button id="btnControls" class="pill-btn">CONTROLS</button>
+            <a href="https://github.com/baishnabikumari/Both-win" target="_blank" id="btnGithub" class="pill-btn link-btn">GITHUB</a>
+            <button id="btnFeatures" class="pill-btn">FEATURES</button>
         </footer>
     </div>
 
+    <div id="levelOverlay" class="overlay hidden">
+        <div class="overlay-card">
+            <h2 id="overlayTitle">Level Complete!</h2>
+            <p id="overlayMessage">Amazing coordination!</p>
+            <div class="overlay-buttons">
+                <button id="btnNext" class="pill-btn">Next Level</button>
+                <button id="btnRetry" class="pill-btn">Replay</button>
+            </div>
+        </div>
+    </div>
+        <div id="howOverlay" class="overlay hidden">
+            <div class="overlay-card">
+                <h2>HOW TO PLAY</h2>
+                <ul class="info-list">
+                    <li>Control <b>Real World</b> and <b>Mirror World</b></li>
+                    <li><b>W - for UP</b></li>
+                    <li><b>S - for Down</b></li>
+                    <li><b>A - for Left</b></li>
+                    <li><b>D - for Right</b></li>
+                    <li><b>R</b>Restart Level</li>
+                </ul>
+                <button id="closeHowBtn" class="pill-btn">CLOSE</button>
+            </div>
+        </div>
+
+        <div id="selectLevelOverlay" class="overlay hidden">
+            <div class="overlay-card">
+                <h2>SELECT LEVEL</h2>
+                <div id="levelList" class="level-grid">
+                </div>
+                <button id="closeSelectBtn" class="pill-btn" style="margin-top:20px;">CLOSE</button>
+            </div>
+        </div>
     <!--JS-->
     <script src="gameLogic.js"></script>
 </body>
-
 </html>
