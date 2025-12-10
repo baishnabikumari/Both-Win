@@ -9,6 +9,7 @@ const btnNext = document.getElementById("btnNext");
 const btnRetry = document.getElementById("btnRetry");
 const howOverlay = document.getElementById("howOverlay");
 const selectLevelOverlay = document.getElementById("selectLevelOverlay");
+const featuresOverlay = document.getElementById("featuresOverlay");
 const levelListContainer = document.getElementById("levelList");
 const moveSound = new Audio("assets/movement.mp3");
 const winSound = new Audio("assets/win.mp3");
@@ -152,12 +153,16 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     document.getElementById("closeSelectBtn").onclick = () => selectLevelOverlay.classList.add("hidden");
     document.getElementById("btnFeatures").onclick = () => {
-        alert("Features:\n- Dual World (real world and mirror world)\n- Retro Sound Effects\n- Level selection\n- Custom UI");
+        featuresOverlay.classList.remove("hidden");
     };
+    document.getElementById("closeFeaturesBtn").onclick = () => {
+        featuresOverlay.classList.add("hidden");
+    }
     document.addEventListener("keydown", (e) => {
         if(e.key === "Escape") {
             howOverlay.classList.add("hidden");
             selectLevelOverlay.classList.add("hidden");
+            featuresOverlay.classList.add("hidden");
         }
     });
 
