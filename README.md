@@ -1,12 +1,19 @@
 # Reflection Rooms
 > **One Move. Two Worlds.**
 
+> **NOTE** - updated Full UI. 
+
 ScreenShot-
-<img width="1440" height="723" alt="Screenshot 2025-12-08 at 10 43 48 PM" src="https://github.com/user-attachments/assets/23fead4c-a6ac-4637-8567-4f715541e242" />
-<img width="1440" height="723" alt="Screenshot 2025-12-08 at 10 44 01 PM" src="https://github.com/user-attachments/assets/279c1150-aa3b-449a-99e2-0d72ded9cc46" />
+
+<img width="1440" height="772" alt="Screenshot 2025-12-10 at 2 07 56 PM" src="https://github.com/user-attachments/assets/60cb7c9e-5f64-44ad-8df3-9475a2ad2264" />
+<img width="1440" height="770" alt="Screenshot 2025-12-10 at 2 07 37 PM" src="https://github.com/user-attachments/assets/133da50c-9feb-47ff-9a76-ef14f21dba7f" />
+<img width="1439" height="775" alt="Screenshot 2025-12-10 at 2 07 30 PM" src="https://github.com/user-attachments/assets/d9f53026-4399-4616-9ad2-65083aff0d94" />
+<img width="1440" height="773" alt="Screenshot 2025-12-10 at 2 05 12 PM" src="https://github.com/user-attachments/assets/bb8629df-b431-4a4e-b0b4-c81215d75551" />
+
 
 ## video of the game-play.
-https://github.com/user-attachments/assets/dbfe4778-5dd3-4a21-b6f7-1fc8cef226d3
+
+https://github.com/user-attachments/assets/e507b427-a4ae-4491-a694-3e17f03f4bdb
 
 ## About the GAME
 **Why Reflection Rooms?** because it is a dual world puzzle game built with plan JavaScript, css and HTML 5 Canvas. Here you control two character(As a ball) - one in "Real world" and 2nd one in "Mirror World".
@@ -24,7 +31,7 @@ you must navigate obstacles, trigger the switches, and use your controls and the
 * **Dual physics engine**
 * **Interactive**
 * **A-symmetrical maps**
-* **Levels built with simple text strings**
+* **Levels built with simple text string (added more difficulty to levels)**
 * **funny sounds added now for all the movements and for more buttons(R,N)**
 
 ## Built with
