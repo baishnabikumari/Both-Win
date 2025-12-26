@@ -1,6 +1,6 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-
+let maxUnlockedLevel = parseInt(localStorage.getItem("reflectionMaxLevel")) || 0;
 const levelDisplay = document.getElementById("levelDisplay");
 const overlay = document.getElementById("levelOverlay");
 const overlayTitle = document.getElementById("overlayTitle");
@@ -427,11 +427,18 @@ function generateLevelList(){
     levels.forEach((lvl, index) => {
         const btn = document.createElement("button");
         btn.classList.add("level-select-btn");
-        btn.textContent = `Level ${index + 1}`;
-        btn.onclick = () => {
-            nextSound.play();
-            loadLevel(index);
-        };
+
+        if(index > maxUnlockedLevel){
+            btn.classList.add("locked");
+            btn.innerHTML = `Level ${index + 1} <br> <span style='font-size:1.2rem'>🔒</span>`;
+            btn.disabled = true;
+        } else {
+            btn.textContent = `Level ${index + 1}`;
+            btn.onclick = () => {
+                nextSound.play();
+                loadLevel(index);
+            };
+        }
         levelListContainer.appendChild(btn);
     });
 }
@@ -499,6 +506,11 @@ function checkWin() {
     ) {
         if(isLevelComplete) return;
         isLevelComplete = true;
+
+        if(currentLevel === maxUnlockedLevel) {
+            maxUnlockedLevel++;
+            localStorage.setItem("reflectionMaxLevel", maxUnlockedLevel);
+        }
 
         playSound(winSound);
         showOverlay("Level Complete!", levels[currentLevel].name);

@@ -215,6 +215,22 @@ body {
     border-color: var(--primary);
 }
 
+/*Locked system for levels*/
+.level-select-btn.locked {
+    background-color: #0f0f0f;
+    color: #444;
+    border: 1px solid #222;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.level-select-btn.locked:hover{
+    background-color: #0f0f0f;
+    border-color: #222;
+    transform: none;
+    filter: none;
+}
+
 /*Responsive*/
 @media (max-width: 800px) {
     .header-center {
