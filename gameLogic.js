@@ -534,6 +534,14 @@ btnRetry.onclick = () => {
     playSound(restartSound);
     loadLevel(currentLevel);
 };
+const btnLevelBack = document.getElementById("btnLevelBack");
+if(btnLevelBack){
+    btnLevelBack.onclick = () => {
+        overlay.classList.add("hidden");
+        generateLevelList();
+        selectLevelOverlay.classList.remove("hidden")
+    };
+}
 
 function drawRoom(grid, offsetX, mirror) {
     ctx.fillStyle = mirror ? "rgba(255,126,182,0.06)" : "rgba(97,218,251,0.10)";
