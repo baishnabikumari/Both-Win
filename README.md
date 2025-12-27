@@ -14,7 +14,7 @@
 > **NOTE** - updated Full UI and Increased Level upto 12 with hard and confusion level. 
 
 ScreenShot-
-
+<img width="1440" height="772" alt="Screenshot 2025-12-28 at 3 31 41 AM" src="https://github.com/user-attachments/assets/4b331720-18cf-4e3e-aa95-021d46b7febe" />
 <img width="1440" height="772" alt="Screenshot 2025-12-10 at 2 07 56 PM" src="https://github.com/user-attachments/assets/60cb7c9e-5f64-44ad-8df3-9475a2ad2264" />
 <img width="1440" height="770" alt="Screenshot 2025-12-10 at 2 07 37 PM" src="https://github.com/user-attachments/assets/133da50c-9feb-47ff-9a76-ef14f21dba7f" />
 <img width="1439" height="775" alt="Screenshot 2025-12-10 at 2 07 30 PM" src="https://github.com/user-attachments/assets/d9f53026-4399-4616-9ad2-65083aff0d94" />
