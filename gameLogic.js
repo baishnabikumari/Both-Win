@@ -18,7 +18,7 @@ const restartSound = new Audio("assets/restart.mp3");
 moveSound.volume = 0.5;
 
 function playSound(Sound) {
-    if(Sound){
+    if (Sound) {
         Sound.currentTime = 0;
         Sound.play().catch(e => console.warn("Sound blocked:", e));
     }
@@ -130,49 +130,43 @@ const levels = [
     {
         name: "Zig Zak",
         real: [
-            "############",
-            "#@....#....#",
-            "###.###.##.#",
-            "#...#.#..#.#",
-            "#.S.#.##.#.#",
-            "#.#.#....#.#",
-            "#...####.D.#",
-            "#.G...#....#",
-            "############"
+            "#############",
+            "#@..........#",
+            "#.====.====.#",
+            "#.#.......#.#",
+            "#.S.......D.#",
+            "#####.=.#####",
+            "#.....=....G#",
+            "#############"
         ],
         mirror: [
-            "############",
-            "#....#....@#",
-            "#.##.#.#####",
-            "#.#..#.#.g.#",
-            "#.#.##.#.s##",
-            "#.#....#..##",
-            "#.d.####.###",
-            "#..........#",
-            "############"
+            "#############",
+            "#..........@#",
+            "#.====.====.#",
+            "#.#.......#.#",
+            "#.d.......s.#",
+            "#####.=.#####",
+            "#g....=.....#",
+            "#############"
         ]
     },
     {
         name: "Brain Twist",
         real: [
-            "#############",
-            "#@.#...#...##",
-            "#..#.#.....##",
-            "#..#.S.#.#.##",
-            "#..#.###.#.##",
-            "##.#.###.#.##",
-            "##...#...D.G#",
-            "#############"
+            "############",
+            "#@.........#",
+            "###.^^^^.###",
+            "#...^..^...#",
+            "#.S.^..^.G.#",
+            "############"
         ],
         mirror: [
-            "#############",
-            "##...#...#..#",
-            "##.#.#.#.#..#",
-            "##.#.#.s.#..#",
-            "##.#.###.#..#",
-            "#g.d.@.#...##",
-            "#g.d...#...##",
-            "#############",
+            "############",
+            "#.........@#",
+            "###.^^^^.###",
+            "#...^..^...#",
+            "#.g.^..^.d.#",
+            "############",
         ]
     },
     {
@@ -323,8 +317,8 @@ let mirrorDoorOpen = false;
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    if(btnNext) btnNext.className = "pill-btn";
-    if(btnRetry) btnRetry.className = "pill-btn";
+    if (btnNext) btnNext.className = "pill-btn";
+    if (btnRetry) btnRetry.className = "pill-btn";
 
     const howTitle = document.querySelector("#howOverlay h2");
     const rulesList = document.getElementById("rulesList");
@@ -346,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("howToPlayBtn").onclick = () => openHow("RULES");
     document.getElementById("btnControls").onclick = () => openHow("CONTROLS");
     document.getElementById("closeHowBtn").onclick = () =>
-    howOverlay.classList.add("hidden");
+        howOverlay.classList.add("hidden");
 
     document.getElementById("btnSelectLevel").onclick = () => {
         generateLevelList();
@@ -360,7 +354,7 @@ document.addEventListener("DOMContentLoaded", () => {
         featuresOverlay.classList.add("hidden");
     }
     document.addEventListener("keydown", (e) => {
-        if(e.key === "Escape") {
+        if (e.key === "Escape") {
             howOverlay.classList.add("hidden");
             selectLevelOverlay.classList.add("hidden");
             featuresOverlay.classList.add("hidden");
@@ -378,11 +372,13 @@ function tile(grid, x, y) {
 function isWallReal(t) {
     if (t === "#" || t === "R") return true;
     if (t === "D" && !realDoorOpen) return true;
+    if (t === "L" && playerKeysR === 0) return true;
     return false;
 }
 function isWallMirror(t) {
     if (t === "#" || t === "X") return true;
     if (t === "d" && !mirrorDoorOpen) return true;
+    if (t === "l" && playerKeysM === 0) return true;
     return false;
 }
 function updateDoors() {
@@ -394,6 +390,9 @@ function updateDoors() {
 function loadLevel(i) {
     isLevelComplete = false
     currentLevel = i;
+    playerKeysR = 0;
+    playerKeysM = 0;
+    crumbleList = [];
 
     levelDisplay.textContent = `LEVEL-${i + 1}`;
 
@@ -422,13 +421,13 @@ function loadLevel(i) {
     hideOverlay();
     selectLevelOverlay.classList.add("hidden");
 }
-function generateLevelList(){
+function generateLevelList() {
     levelListContainer.innerHTML = "";
     levels.forEach((lvl, index) => {
         const btn = document.createElement("button");
         btn.classList.add("level-select-btn");
 
-        if(index > maxUnlockedLevel){
+        if (index > maxUnlockedLevel) {
             btn.classList.add("locked");
             btn.innerHTML = `Level ${index + 1} <br> <span style='font-size:1.2rem'>🔒</span>`;
             btn.disabled = true;
@@ -450,15 +449,15 @@ window.addEventListener("resize", resize);
 
 //movement
 document.addEventListener("keydown", (e) => {
-    if(e.key === "r"){
+    if (e.key === "r") {
         playSound(restartSound);
         return loadLevel(currentLevel);
     }
-    if(e.key === "n"){
+    if (e.key === "n") {
         playSound(nextSound);
         return loadLevel((currentLevel + 1) % levels.length);
     }
-    
+
     let dx = 0, dy = 0;
     if (e.key === "ArrowUp" || e.key === "w") dy = -1;
     if (e.key === "ArrowDown" || e.key === "s") dy = 1;
@@ -468,35 +467,94 @@ document.addEventListener("keydown", (e) => {
     move(dx, dy);
 });
 function move(dxR, dyR) {
-    if(isLevelComplete) return;
+    if (isLevelComplete) return;
     const dxM = -dxR;
     const dyM = dyR;
 
-    const nrX = playerR.x + dxR;
-    const nrY = playerR.y + dyR;
+    let nrX = playerR.x + dxR;
+    let nrY = playerR.y + dyR;
+    let nextTileR = tile(realGrid, nrX, nrY);
 
-    const nmX = playerM.x + dxM;
-    const nmY = playerM.y + dyM;
+    while (nextTileR === "=" && !isWallReal(tile(realGrid, nrX + dxR, nrY + dyR))) {
+        nrX += dxR;
+        nrY += dyR;
+        nextTileR = tile(realGrid, nrX, nrY);
+    }
 
-    let moved = false;
+    let movedR = false;
 
     if (!isWallReal(tile(realGrid, nrX, nrY))) {
+        if (nextTileR === "L" && playerKeysR > 0) {
+            playerKeysR--;
+            realGrid[nrY][nrX] = ".";
+            playSound(winSound);
+        }
         playerR.x = nrX;
         playerR.y = nrY;
-        moved = true;
+        movedR = true;
     }
 
-    if (!isWallMirror(tile(mirrorGrid, nmX, nmY))) {
+    let nmX = playerM.x + dxM;
+    let nmY = playerM.y + dyM;
+    let nextTileM = tile(mirrorGrid, nmX, nmY);
+
+    while (nextTileM === "=" && !isWallMirror(tile(mirrorGrid, nmX + dxM, nmY + dyM))) {
+        nmX += dxM;
+        nmY += dyM;
+        nextTileM = tile(mirrorGrid, nmX, nmY);
+    }
+    let movedM = false;
+
+    if (!isWallMirror(nextTileM)) {
+        if (nextTileM === 'l' && playerKeysM > 0) {
+            playerKeysM--;
+            mirrorGrid[nmY][nmX] = ".";
+            playSound(winSound);
+        }
         playerM.x = nmX;
         playerM.y = nmY;
-        moved = true;
+        movedM = true;
     }
-    if (moved) {
+    if (movedR || movedM) {
         moveSound.currentTime = 0;
         playSound(moveSound);
         moveCount++;
+
+        checkTileInteractions(realGrid, playerR, "REAL");
+        checkTileInteractions(mirrorGrid, playerM, "MIRROR")
+
         updateDoors();
         checkWin();
+    }
+}
+
+function checkTileInteractions(grid, pos, world) {
+    const t = grid[pos.y][pos.x];
+
+    if (t === "^") {
+        playSound(restartSound);
+        loadLevel(currentLevel);
+        return;
+    }
+    if (t === "K" || t === "k") {
+        grid[pos.y][pos.x] = ".";
+        if (world === "REAL") playerKeysR++;
+        else playerKeysM++;
+        playSound(winSound);
+    }
+    if (t === "+") {
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                if (grid[y][x] === "0" && (x !== pos.x || y !== pos.y)) {
+                    pos.x = x;
+                    pos.y = y;
+                    return;
+                }
+            }
+        }
+    }
+    if(t === "+"){
+        grid[pos.y][pos.x] = "#";
     }
 }
 function checkWin() {
@@ -504,10 +562,10 @@ function checkWin() {
         playerR.x === goalR.x && playerR.y === goalR.y &&
         playerM.x === goalM.x && playerM.y === goalM.y
     ) {
-        if(isLevelComplete) return;
+        if (isLevelComplete) return;
         isLevelComplete = true;
 
-        if(currentLevel === maxUnlockedLevel) {
+        if (currentLevel === maxUnlockedLevel) {
             maxUnlockedLevel++;
             localStorage.setItem("reflectionMaxLevel", maxUnlockedLevel);
         }
@@ -535,7 +593,7 @@ btnRetry.onclick = () => {
     loadLevel(currentLevel);
 };
 const btnLevelBack = document.getElementById("btnLevelBack");
-if(btnLevelBack){
+if (btnLevelBack) {
     btnLevelBack.onclick = () => {
         overlay.classList.add("hidden");
         generateLevelList();
@@ -571,6 +629,18 @@ function drawRoom(grid, offsetX, mirror) {
             if (t === "D" && !mirror) drawDoor(px, py, true);
             if (t === "d" && mirror) drawDoor(px, py, false);
 
+            if (t === "^") drawSpike(px, py, mirror);
+            if (t === "=") drawIce(px, py);
+            if (t === "K") drawKey(px, py, false);
+            if (t === "k") drawKey(px, py, true);
+            if (t === "L") drawLock(px, py, false);
+            if (t === "l") drawLock(px, py, true);
+            if (t === "O") drawPortal(px, py, mirror);
+            if (t === "+") {
+                ctx.fillStyle = "#555";
+                ctx.fillRect(px + 5, py + 5, TILE - 10, TILE - 10);
+            }
+
             if (t === "S" && !mirror) drawSwitch(px, py, false);
             if (t === "s" && mirror) drawSwitch(px, py, true);
 
@@ -600,7 +670,7 @@ function drawDoor(px, py, realDoor) {
     ctx.lineWidth = 3;
     ctx.strokeRect(px + 10, py + 10, TILE - 20, TILE - 20);
 
-    if(!open) {
+    if (!open) {
         ctx.fillStyle = ctx.strokeStyle;
         ctx.globalAlpha = 0.2;
         ctx.fillRect(px + 10, py + 10, TILE - 20, TILE - 20);
@@ -616,7 +686,7 @@ function drawSwitch(px, py, mirror) {
     const isActive = mirror ? mirrorDoorOpen : realDoorOpen;
     ctx.fillStyle = mirror ? "#f25349" : "#61dafb";
 
-    if(isActive) ctx.fillStyle = "#ffffff";
+    if (isActive) ctx.fillStyle = "#ffffff";
     ctx.beginPath();
     ctx.roundRect(cx - 15, cy - 6, 30, 12, 6);
     ctx.fill();
@@ -648,4 +718,94 @@ function render() {
 function gameLoop() {
     render();
     requestAnimationFrame(gameLoop);
+}
+
+//bgm
+const bgMusic = document.getElementById("bgMusic");
+const btnMute = document.getElementById("btnMute");
+let isMusicPlaying = false;
+
+if (bgMusic) {
+    bgMusic.volume = 0.3;
+    const playPromise = bgMusic.play();
+
+    if (playPromise !== undefined) {
+        playPromise.then(() => {
+            isMusicPlaying = true;
+            updateMuteButton();
+        }).catch(error => {
+            console.log("Autoplay blocked. User must interact first.");
+            isMusicPlaying = false;
+            updateMuteButton();
+        });
+    }
+}
+if (btnMute && bgMusic) {
+    btnMute.onclick = () => {
+        if (bgMusic.paused) {
+            bgMusic.play();
+            isMusicPlaying = true;
+        } else {
+            bgMusic.pause();
+            isMusicPlaying = false;
+        }
+        updateMuteButton();
+    };
+}
+function updateMuteButton() {
+    if (!btnMute) return;
+
+    if (isMusicPlaying) {
+        btnMute.textContent = "🔊";
+        btnMute.style.backgroundColor = "#33d6a6";
+        btnMute.style.borderColor = "#33d6a6";
+    } else {
+        btnMute.textContent = "🔇";
+        btnMute.style.backgroundColor = "#333"
+        btnMute.style.borderColor = "#555";
+    }
+}
+
+function drawSpike(px, py, mirror) {
+    const cx = px + TILE / 2;
+    const cy = py + TILE / 2;
+    ctx.fillStyle = mirror ? "#800000" : "#ff0000";
+    ctx.beginPath();
+    ctx.moveTo(cx, py + 5);
+    ctx.lineTo(px + 5, py + TILE - 5);
+    ctx.lineTo(px + TILE - 5, py + TILE - 5);
+    ctx.fill();
+}
+
+function drawIce(px, py) {
+    ctx.fillStyle = "rgba(200, 240, 255, 0.4)";
+    ctx.fillRect(px, py, TILE, TILE);
+    ctx.strokeStyle = "white";
+    ctx.beginPath();
+    ctx.moveTo(px + 10, py + 10);
+    ctx.lineTo(px + TILE - 10, py + TILE - 10);
+    ctx.stroke();
+}
+
+function drawKey(px, py, mirror) {
+    ctx.fillStyle = "gold";
+    ctx.beginPath();
+    ctx.arc(px + TILE / 2, py + TILE / 2, 10, 0, Math.PI * 2);
+    ctx.fill();
+}
+
+function drawLock(px, py, mirror) {
+    ctx.fillStyle = "goldenrod";
+    ctx.fillRect(px + 10, py + 10, TILE - 20, TILE - 20);
+    ctx.fillStyle = "black";
+    ctx.beginPath();
+    ctx.arc(px + TILE / 2, py + TILE / 2 - 5, 8, Math.PI, 0);
+    ctx.stroke();
+}
+
+function drawPortal(px, py, mirror) {
+    ctx.fillStyle = mirror ? "#9932CC" : "#BA55D3";
+    ctx.beginPath();
+    ctx.arc(px + TILE / 2, py + TILE / 2, 15, 0, Math.PI * 2);
+    ctx.fill();
 }
