@@ -1,7 +1,17 @@
 # Reflection Rooms
-> **One Move. Two Worlds.**
+> **One Move. Two Worlds each move is diff in the mirror world left = right.**
+> **New Spikes and Things.**
+```bash
+   Portals(O,o) - teleportation.
 
-> **NOTE** - updated Full UI. 
+   One-timeTile (+) if you Step on that tile is and move anywhere else so now the tile is solid You can step on this now.
+
+   Spikes(^) Dont step the level will Restart.
+   Ice(=) Sliding.
+   Keys(yellow circle) and Lock(Yellow Square).
+```
+
+> **NOTE** - updated Full UI and Increased Level upto 12 with hard and confusion level. 
 
 ScreenShot-
 
