@@ -131,22 +131,22 @@ const levels = [
         name: "Zig Zak", // level 5
         real: [
             "#############",
-            "#@..........#",
+            "#@...#......#",
             "#.====.====.#",
             "#.#.......#.#",
-            "#.S.......D.#",
-            "#####.=.#####",
-            "#.....=....G#",
+            "#.....#...#.#",
+            "###.=.#.=.###",
+            "#G..=.#.=..S#",
             "#############"
         ],
         mirror: [
             "#############",
-            "#..........@#",
+            "#......#...@#",
             "#.====.====.#",
             "#.#.......#.#",
-            "#.d.......s.#",
-            "#####.=.#####",
-            "#g....=.....#",
+            "#.#...#.....#",
+            "###.=.#.=.###",
+            "#s..=.#.=..g#",
             "#############"
         ]
     },
@@ -240,22 +240,24 @@ const levels = [
         name: "Nightmare", // level 10
         real: [
             "###############",
-            "#@.....=.....K#",
-            "#^^^^^.=.^^^^^#",
-            "#^^^^^.=.^^^^^#",
-            "#S.....=.....L#",
-            "#^^^^^.=.^^^^^#",
-            "#G.....=.....D#",
+            "#@====+===== O#",
+            "#^^^^^.^^^^^.##",
+            "#.OK..+..S...##",
+            "#^^^^^#^^^^^.##",
+            "#O====+===== L#",
+            "#^^^^^.^^^^^.##",
+            "#..D..+.....G.#",
             "###############"
         ],
         mirror: [
             "###############",
-            "#K.....=.....K#",
-            "#^^^^^.=.^^^^^#",
-            "#^^^^^.=.^^^^^#",
-            "#l.....=.....s#",
-            "#^^^^^.=.^^^^^#",
-            "#d.....=.....g#",
+            "#o =====+====@#",
+            "##.^^^^^.^^...#",
+            "##...s..+..k..#",
+            "#..^^^^^#^^^..#",
+            "# ======.====o#",
+            "##.^^^^l.^^^^^#",
+            "#.g.....+..d..#",
             "###############"
         ]
     },
@@ -264,21 +266,21 @@ const levels = [
         real: [
             "#############",
             "#@+++++++++K#",
+            "#^^^^^^^^^^O#",
             "#^^^^^^^^^^^#",
-            "#^^^^^^^^^^^#",
-            "#L+++++++++G#",
-            "#^^^^^^^^^^^#",
-            "#S.........D#",
+            "#O+++++++++L#",
+            "#^^^^^^^^^^G#",
+            "#S..........#",
             "#############"
         ],
         mirror: [
             "#############",
             "#k+++++++++@#",
+            "#o^^^^^^^^^^#",
             "#^^^^^^^^^^^#",
-            "#^^^^^^^^^^^#",
-            "#+++++++++++#",
-            "#^^^^^^^^^^^#",
-            "#d.........s#",
+            "#l+++++++++o#",
+            "#g^^^^^^^^^^#",
+            "#..........s#",
             "#############"
         ]
     },
@@ -401,7 +403,6 @@ function loadLevel(i) {
     currentLevel = i;
     playerKeysR = 0;
     playerKeysM = 0;
-    crumbleList = [];
 
     levelDisplay.textContent = `LEVEL-${i + 1}`;
 
@@ -551,10 +552,11 @@ function checkTileInteractions(grid, pos, world) {
         else playerKeysM++;
         playSound(winSound);
     }
-    if (t === "0") {
+    if (t === "O" || t === "o") {
+        const targetChar = (t === "O") ? "O" : "o";
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
-                if (grid[y][x] === "O" && (x !== pos.x || y !== pos.y)) {
+                if (grid[y][x] === targetChar && (x !== pos.x || y !== pos.y)) {
                     pos.x = x;
                     pos.y = y;
                     return;
@@ -644,7 +646,7 @@ function drawRoom(grid, offsetX, mirror) {
             if (t === "k") drawKey(px, py, true);
             if (t === "L") drawLock(px, py, false);
             if (t === "l") drawLock(px, py, true);
-            if (t === "O") drawPortal(px, py, mirror);
+            if (t === "O" || t === "o") drawPortal(px, py, mirror);
             if (t === "+") {
                 ctx.fillStyle = "#555";
                 ctx.fillRect(px + 5, py + 5, TILE - 10, TILE - 10);
@@ -674,13 +676,15 @@ function drawGoal(px, py, mirror) {
 }
 function drawDoor(px, py, realDoor) {
     const open = realDoor ? realDoorOpen : mirrorDoorOpen;
+    const color = open ? "#33d6a6" : "#f25349";
 
-    ctx.fillStyle = open ? "#33d6a6" : "#f25349";
+    ctx.fillStyle = color;
+    ctx.strokeStyle = color;
     ctx.lineWidth = 3;
     ctx.strokeRect(px + 10, py + 10, TILE - 20, TILE - 20);
 
     if (!open) {
-        ctx.fillStyle = ctx.strokeStyle;
+        ctx.fillStyle = color;
         ctx.globalAlpha = 0.2;
         ctx.fillRect(px + 10, py + 10, TILE - 20, TILE - 20);
         ctx.globalAlpha = 1.0;
